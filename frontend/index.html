@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deploy Log</title>
+<style>
+  :root { --bg:#eef2f5; --ink:#1c2b36; --muted:#5d6f7c; --line:#c9d4dc; --accent:#0b6e8a; --done:#8a9aa6; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.5 "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 48px 20px; }
+  h1 { font-size: 2rem; margin: 0 0 4px; letter-spacing: -0.02em; }
+  p.sub { margin: 0 0 28px; color: var(--muted); }
+  form { display:flex; gap:8px; margin-bottom: 20px; }
+  input { flex:1; padding:12px 14px; border:1px solid var(--line); border-radius:6px; font:inherit; background:#fff; }
+  button { cursor:pointer; font:inherit; border:0; border-radius:6px; }
+  form button { background:var(--accent); color:#fff; padding:0 18px; }
+  :focus-visible { outline:3px solid #f0a020; outline-offset:2px; }
+  ul { list-style:none; margin:0; padding:0; border-top:1px solid var(--line); }
+  li { display:flex; align-items:center; gap:12px; padding:12px 4px; border-bottom:1px solid var(--line); }
+  li span { flex:1; }
+  li.done span { color:var(--done); text-decoration:line-through; }
+  li button { background:none; color:var(--muted); padding:4px 8px; }
+  li button:hover { color:var(--ink); }
+  #msg { margin-top:16px; color:#a03030; min-height:1.5em; }
+  footer { margin-top:32px; color:var(--muted); font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Deploy log</h1>
+  <p class="sub">Things to ship, check and fix. Stored in PostgreSQL.</p>
+  <form id="f">
+    <input id="t" placeholder="Add a task" maxlength="100" aria-label="Task title" required>
+    <button>Add task</button>
+  </form>
+  <ul id="list"></ul>
+  <div id="msg" role="alert"></div>
+  <footer id="ver">Checking backend...</footer>
+</main>
+<script>
+const list = document.getElementById('list'), msg = document.getElementById('msg');
+async function api(url, opts) {
+  const r = await fetch(url, opts);
+  if (!r.ok && r.status !== 204) { const e = await r.json().catch(() => ({})); throw new Error(e.error || 'Request failed'); }
+  return r.status === 204 ? null : r.json();
+}
+async function load() {
+  try {
+    const tasks = await api('/api/tasks');
+    list.innerHTML = '';
+    if (!tasks.length) list.innerHTML = '<li><span>No tasks yet. Add your first one above.</span></li>';
+    tasks.forEach(t => {
+      const li = document.createElement('li'); if (t.done) li.className = 'done';
+      const s = document.createElement('span'); s.textContent = t.title;
+      const a = document.createElement('button'); a.textContent = t.done ? 'Reopen' : 'Mark done';
+      a.onclick = async () => { await api('/api/tasks/' + t.id, { method: 'PATCH' }); load(); };
+      const d = document.createElement('button'); d.textContent = 'Delete';
+      d.onclick = async () => { await api('/api/tasks/' + t.id, { method: 'DELETE' }); load(); };
+      li.append(s, a, d); list.append(li);
+    });
+    msg.textContent = '';
+  } catch (e) { msg.textContent = 'Could not load tasks: ' + e.message; }
+}
+document.getElementById('f').onsubmit = async e => {
+  e.preventDefault();
+  const i = document.getElementById('t');
+  try { await api('/api/tasks', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ title:i.value }) }); i.value=''; load(); }
+  catch (err) { msg.textContent = err.message; }
+};
+fetch('/health').then(r => r.json()).then(h => document.getElementById('ver').textContent = 'Backend ' + h.status + ' · build ' + h.version)
+  .catch(() => document.getElementById('ver').textContent = 'Backend unreachable');
+load();
+</script>
+</body>
+</html>
