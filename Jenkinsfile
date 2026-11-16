@@ -54,7 +54,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Deploying....'
+                echo 'Deploying...'
                 sh '''
                 ssh -o "StrictHostKeyChecking no" ${DEPLOY_HOST} "cd ${APP_DIR} && export TAG=${TAG} && docker compose pull && docker compose up -d"
                 '''
