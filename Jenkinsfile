@@ -63,7 +63,7 @@ pipeline {
                         scp -o StrictHostKeyChecking=no docker-compose.yml $DEPLOY_HOST:$APP_DIR/
                         ssh -o StrictHostKeyChecking=no $DEPLOY_HOST "
                         cd $APP_DIR &&
-                        printf 'DB_PASSWORD=%s\\nPOSTGRES_PASSWORD=%s\nDOCKERHUB_USER=%s\\nTAG=%s\\n' '$DB_PASSWORD' '$DOCKERHUB_USER' '$TAG' > .env &&                        
+                        printf 'DB_PASSWORD=%s\\nPOSTGRES_PASSWORD=%s\nDOCKERHUB_USER=%s\\nTAG=%s\\n' '$DB_PASSWORD' '$DB_PASSWORD' '$DOCKERHUB_USER' '$TAG' > .env &&                        
                         docker compose pull &&
                         docker compose up -d --remove-orphans"
                         '''
