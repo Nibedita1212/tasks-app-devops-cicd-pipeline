@@ -25,7 +25,7 @@ pipeline {
             steps {
                 echo 'Testing backend...'
                 sh '''
-                docker run --rm -v $Workspace:/app -w /app node:20-alpine sh -c "npm install && npm test"
+                docker run --rm -v $Workspace/backend:/app -w /app node:20-alpine sh -c "npm install && npm test"
                 '''
             }
         }
