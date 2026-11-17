@@ -56,10 +56,20 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Deploying...'
-                sh '''
-                ssh -o "StrictHostKeyChecking no" ${DEPLOY_HOST} "cd ${APP_DIR} && export TAG=${TAG} && docker compose pull && docker compose up -d"
-                '''
+                sshagent(credentials: ['app-server-ssh']) {
+                    withCredentials([string(credentialsId: 'db-password', variable: 'DB_PASSWORD')]) {
+                        sh '''
+                        ssh -o StrictHostKeyChecking=no $DEPLOY_HOST "mkdir -p $APP_DIR"
+                        scp -o StrictHostKeyChecking=no docker-compose.yml $DEPLOY_HOST:$APP_DIR/
+                        ssh -o StrictHostKeyChecking=no $DEPLOY_HOST "
+                        cd $APP_DIR &&
+                        printf 'DB_PASSWORD=%s\\nDOCKERHUB_USER=%s\\nTAG=%s\\n' '$DB_PASSWORD' '$DOCKERHUB_USER' '$TAG' > .env &&                        
+                        docker compose pull &&
+                        docker compose up -d --remove-orphans"
+                        '''
+                    }
+                }
+                
             }
         }
     }
