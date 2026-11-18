@@ -1,4 +1,4 @@
-# tasks-app-devops-cicd-pipeline -- DevOps CI/CD Project
+# Tasks-app-devops-cicd-pipeline -- DevOps CI/CD Project
 ## Project Overview
 This project demonstrates the deployment of a 3-tier web application using DevOps tools and practices. It includes a frontend, a Node.js backend, and a PostgreSQL database. Docker is used to run the application components in containers, while Jenkins automates the build and deployment process to AWS EC2.
 ## Architecture Diagram
