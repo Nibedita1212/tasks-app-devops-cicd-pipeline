@@ -56,13 +56,17 @@ Running the Application Locally
 2.	Clone this repository:
 git clone https://github.com/Nibedita1212/tasks-app-devops-cicd-pipeline.git
 cd tasks-app-devops-cicd-pipeline
-3.	Configure the required environment variables using your local environment file or shell environment, as expected by the Compose configuration.
+3.	Create a .env file in the root directory to configure your required environment variables:   
+POSTGRES_PASSWORD=your_secure_password
+DOCKERHUB_USER=your_dockerhub_username
+TAG=latest
 4.	Start the application:
 docker compose up -d --build
 5.	Check the running containers:
 docker compose ps
 6.	View application logs if needed:
 docker compose logs -f
+7.  Access the application in your browser at:http://localhost
 To stop the application:
 docker compose down
 
@@ -77,11 +81,16 @@ Screenshots
 Screenshot         What to show
 
 Jenkins pipeline   ![Jenkins Pipeline](screenshots/jenkins-pipeline.png)
+
 Successful pipeline execution Docker Hub    
 Frontend   ![DockerHub Frontend](screenshots/dockerhub-frontend.png)
+
 Backend   ![DockerHub Backend](screenshots/dockerhub-backend.png)
-Frontend and backend repositories/tags AWS EC2   ![AWS Instances](screenshots/aws-ec2.png)         
+
+Frontend and backend repositories/tags AWS EC2   ![AWS Instances](screenshots/aws-ec2.png)   
+
 Application server and running containers   ![Application Containers](screenshots/application-server-containers.png)
+
 Application running in the browser   ![Live Application](screenshots/live-application.png)
 
 Security Notes
@@ -89,13 +98,15 @@ Security Notes
 •	Store sensitive values in Jenkins Credentials or a protected environment configuration.
 •	Use a .gitignore file to exclude secrets and local/generated files.
 •	Restrict inbound SSH access to trusted sources.
+
 Future Improvements
 •	Add application health checks and monitoring.
 •	Add automated database backup and recovery.
 •	Improve deployment rollback and release management.
 •	Add infrastructure provisioning with Terraform.
 •	Add container orchestration when required.
+
 Author
 Project: tasks-app-devops-cicd-pipeline
-GitHub: https://github.com/Nibedita1212/tasks-app-devops-cicd-pipeline.git
+GitHub: https://github.com/Nibedita1212/tasks-app-devops-cicd-pipeline
 
