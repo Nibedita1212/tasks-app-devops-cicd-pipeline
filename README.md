@@ -1,16 +1,16 @@
-3-Tier Web Application -- DevOps CI/CD Project
+tasks-app-devops-cicd-pipeline -- DevOps CI/CD Project
 Project Overview
 This project demonstrates the deployment of a 3-tier web application using DevOps tools and practices. It includes a frontend, a Node.js backend, and a PostgreSQL database. Docker is used to run the application components in containers, while Jenkins automates the build and deployment process to AWS EC2.
 Architecture Diagram
 The diagram below shows the CI/CD workflow and the application components.
-developer-code-only\screenshots\ArchitectureDiagram.png
+![Architecture Diagram](screenshots/ArchitectureDiagram.png)
 
 Technology Stack
 Area                       Technology
 
 Source code management     Git, GitHub
 CI/CD                      Jenkins
- Containerization           Docker, Docker Compose 
+Containerization           Docker, Docker Compose 
 Container image registry   Docker Hub 
 Cloud infrastructure       AWS EC2 
 Backend                    Node.js 
@@ -23,6 +23,7 @@ The application has three main layers:
 2.	Backend: A Node.js API that handles application requests and communicates with the database.
 3.	Database: PostgreSQL stores the application data.
 The frontend communicates with the backend API. The backend connects to PostgreSQL. The frontend does not connect directly to the database.
+
 DevOps Workflow
 1.	Application source code is maintained in GitHub.
 2.	A GitHub webhook triggers the Jenkins pipeline when code is pushed.
@@ -32,26 +33,29 @@ DevOps Workflow
 6.	Jenkins connects to the AWS application EC2 instance over SSH.
 7.	The application server pulls the required images from Docker Hub and starts the updated containers.
 The exact pipeline stages and deployment commands are defined in the project's Jenkinsfile and Docker Compose configuration.
+
 AWS Infrastructure
 The project uses two EC2 instances:
 •	Jenkins EC2: Runs Jenkins and executes the CI/CD pipeline. Docker is also available here for building images.
 •	Application EC2: Hosts the application containers using Docker.
 Jenkins connects to the application EC2 instance over SSH to perform deployment tasks. Keep SSH access restricted to the Jenkins server's security group or trusted source. Do not store private keys or passwords in the Git repository.
+
 Repository Structure
-The structure below is an example. Keep the actual folder and file names in this repository if they differ.
-3-tier-application/
+
+tasks-app-devops-cicd-pipeline/
 ├── frontend/
 ├── backend/
 ├── screenshots/
 ├── docker-compose.yml
 ├── Jenkinsfile
 ├── README.md
-└── DEVOPS-README.md
+└── Devloper-README.md
+
 Running the Application Locally
 1.	Install Docker and Docker Compose.
 2.	Clone this repository:
-git clone <YOUR_GITHUB_REPOSITORY_URL>
-cd <YOUR_PROJECT_DIRECTORY>
+git clone https://github.com/Nibedita1212/tasks-app-devops-cicd-pipeline.git
+cd tasks-app-devops-cicd-pipeline
 3.	Configure the required environment variables using your local environment file or shell environment, as expected by the Compose configuration.
 4.	Start the application:
 docker compose up -d --build
@@ -61,20 +65,25 @@ docker compose ps
 docker compose logs -f
 To stop the application:
 docker compose down
-Confirm the required environment variable names and application URL/port from your actual Compose file and application configuration before publishing this README.
+
 CI/CD Pipeline
 The Jenkins pipeline is defined in the Jenkinsfile. It automates the configured build, image publishing, and deployment steps.
 •	GitHub webhook integration triggers the pipeline.
 •	Docker images are built and pushed to Docker Hub.
 •	Jenkins uses configured credentials for Docker Hub and SSH deployment.
 •	The application EC2 instance pulls the images and runs the containers.
+
 Screenshots
-Add your own project screenshots to a folder such as docs/screenshots/, then update the image paths below.
 Screenshot         What to show
 
-Jenkins pipeline   Successful pipeline execution Docker Hub         Frontend and backend repositories/tags AWS EC2            Application server and running containers Live application   Application running in the browser
-Example:
-![Jenkins Pipeline](docs/screenshots/jenkins-pipeline.png)
+Jenkins pipeline   ![Jenkins Pipeline](screenshots/jenkins-pipeline.png)
+Successful pipeline execution Docker Hub    
+Frontend   ![DockerHub Frontend](screenshots/dockerhub-frontend.png)
+Backend   ![DockerHub Backend](screenshots/dockerhub-backend.png)
+Frontend and backend repositories/tags AWS EC2   ![AWS Instances](screenshots/aws-ec2.png)         
+Application server and running containers   ![Application Containers](screenshots/application-server-containers.png)
+Application running in the browser   ![Live Application](screenshots/live-application.png)
+
 Security Notes
 •	Do not commit .env files, passwords, database credentials, private SSH keys, .pem files, or certificates.
 •	Store sensitive values in Jenkins Credentials or a protected environment configuration.
@@ -87,6 +96,6 @@ Future Improvements
 •	Add infrastructure provisioning with Terraform.
 •	Add container orchestration when required.
 Author
-Project: 3-Tier Web Application -- DevOps CI/CD Implementation
-GitHub: <YOUR_GITHUB_PROFILE_OR_REPOSITORY_URL>{=html}
+Project: tasks-app-devops-cicd-pipeline
+GitHub: https://github.com/Nibedita1212/tasks-app-devops-cicd-pipeline.git
 
