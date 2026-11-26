@@ -63,7 +63,7 @@ pipeline {
                     emailext(
                         to: 'nibedita01212@gmail.com',
                         subject: "Approval needed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                        body: "Approval is required for the production deployment.\nApprove here: ${env.BUILD_URL}input"
+                        body: "Approval is required for the production deployment.\nApprove here: ${env.BUILD_URL}input."
                     )
                 }
                 timeout(time: 1, unit: 'HOURS') {
